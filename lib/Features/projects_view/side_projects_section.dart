@@ -1,7 +1,33 @@
+import 'package:dave_portfolio/models/project.dart';
+import 'package:dave_portfolio/util/app_theme.dart';
+import 'package:dave_portfolio/util/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class SideProjectsSection extends StatelessWidget {
+class ProjectsSection extends StatelessWidget {
+  final List<Project> projects = [
+    Project(
+      imagePath: '',
+      title: 'badi',
+      subtitle: 'Real estate app for finding properties',
+    ),
+    Project(
+      imagePath: 'https://via.placeholder.com',
+      title: 'FilmFinder',
+      subtitle: 'Movie discovery app with personalized ratings',
+    ),
+    Project(
+      imagePath: 'https://via.placeholder.com',
+      title: 'Finova',
+      subtitle: 'a phone authentication app flow with Firebase',
+    ),
+    Project(
+      imagePath: 'https://via.placeholder.com',
+      title: 'Quirky',
+      subtitle: 'a to-do list app with Firebase',
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -9,10 +35,14 @@ class SideProjectsSection extends StatelessWidget {
       child: LayoutBuilder(
         builder: (context, constraints) {
           final double width = constraints.maxWidth;
-          bool isMobile = width < 600;
+          bool isMobile = width < kMobileBreakpoint;
           double maxContentWidth =
-              isMobile ? double.infinity : (width < 1200 ? 700 : 800);
-          double horizontalPadding = isMobile ? 24.0 : 40.0;
+              isMobile ? double.infinity : (width < kTabletBreakpoint ? 700 : 800);
+          double horizontalPadding = isMobile
+              ? kMobileHorizontalPadding
+              : (width < kTabletBreakpoint
+                  ? kTabletHorizontalPadding
+                  : kDesktopHorizontalPadding);
           double verticalPadding = isMobile ? 48.0 : 96.0;
 
           return Center(
@@ -34,35 +64,11 @@ class SideProjectsSection extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 24),
-                    Divider(color: Colors.black.withOpacity(0.2), height: 1),
-                    _ProjectItem(
-                      imagePath: '',
-                      title: 'badi',
-                      subtitle: 'Real estate app for finding properties',
-                      isMobile: isMobile,
-                    ),
-                    Divider(color: Colors.black.withOpacity(0.2), height: 1),
-                
-                    _ProjectItem(
-                      imagePath: 'https://via.placeholder.com',
-                      title: 'FilmFinder',
-                      subtitle: 'Movie discovery app with personalized ratings',
-                      isMobile: isMobile,
-                    ),
-                    Divider(color: Colors.black.withOpacity(0.2), height: 1),
-                    _ProjectItem(
-                      imagePath: 'https://via.placeholder.com',
-                      title: 'Finova',
-                      subtitle: 'a phone authentication app flow with Firebase',
-                      isMobile: isMobile,
-                    ),
-                    Divider(color: Colors.black.withOpacity(0.2), height: 1),
-                    _ProjectItem(
-                      imagePath: 'https://via.placeholder.com',
-                      title: 'Quirky',
-                      subtitle: 'a to-do list app with Firebase',
-                      isMobile: isMobile,
-                    ),
+                    Divider(color: AppTheme.primaryColor.withOpacity(0.2), height: 1),
+                    ...projects.map((project) => _ProjectItem(
+                          project: project,
+                          isMobile: isMobile,
+                        )),
                   ],
                 ),
               ),
@@ -75,18 +81,12 @@ class SideProjectsSection extends StatelessWidget {
 }
 
 class _ProjectItem extends StatelessWidget {
-  final String imagePath;
-  final String title;
-  final String subtitle;
+  final Project project;
   final bool isMobile;
 
   const _ProjectItem({
-   
-    required this.imagePath,
-    required this.title,
-    required this.subtitle,
+    required this.project,
     required this.isMobile,
-    
   });
 
   @override
@@ -98,14 +98,13 @@ class _ProjectItem extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // This is the phone-shaped container
           Container(
             width: imageWidth,
-            height: imageWidth * (19.5 / 9), // A common phone aspect ratio
+            height: imageWidth * (19.5 / 9),
             decoration: BoxDecoration(
-              color: Colors.white, // A background color for the phone screen
+              color: Colors.white,
               border: Border.all(
-                color: Colors.black.withOpacity(0.4),
+                color: AppTheme.primaryColor.withOpacity(0.4),
                 width: 1.5,
               ),
               borderRadius: BorderRadius.circular(12),
@@ -113,22 +112,22 @@ class _ProjectItem extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10.5),
               child: Image.network(
-                imagePath,
-                fit: BoxFit.cover, // Fills the container, clipping if necessary
-                // Optional: Add a loading builder for a better user experience
+                project.imagePath,
+                fit: BoxFit.cover,
                 loadingBuilder: (context, child, loadingProgress) {
                   if (loadingProgress == null) return child;
                   return Center(
                     child: CircularProgressIndicator(
                       strokeWidth: 2.0,
-                      value:
-                          loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                                  loadingProgress.expectedTotalBytes!
-                              : null,
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded /
+                              loadingProgress.expectedTotalBytes!
+                          : null,
                     ),
                   );
                 },
+                errorBuilder: (context, error, stackTrace) =>
+                    const Icon(Icons.error, color: AppTheme.primaryColor),
               ),
             ),
           ),
@@ -138,7 +137,7 @@ class _ProjectItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  title,
+                  project.title,
                   style: GoogleFonts.inter(
                     fontSize: isMobile ? 22 : 28,
                     fontWeight: FontWeight.bold,
@@ -146,7 +145,7 @@ class _ProjectItem extends StatelessWidget {
                 ),
                 SizedBox(height: isMobile ? 4 : 8),
                 Text(
-                  subtitle,
+                  project.subtitle,
                   style: GoogleFonts.inter(
                     fontSize: isMobile ? 16 : 20,
                     fontStyle: FontStyle.italic,
@@ -160,9 +159,9 @@ class _ProjectItem extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(color: Colors.black, width: 1.5),
+              border: Border.all(color: AppTheme.primaryColor, width: 1.5),
             ),
-            child: const Icon(Icons.arrow_forward, color: Colors.black),
+            child: const Icon(Icons.arrow_forward, color: AppTheme.primaryColor),
           ),
         ],
       ),

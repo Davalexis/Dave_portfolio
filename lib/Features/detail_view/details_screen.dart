@@ -1,23 +1,36 @@
+import 'package:dave_portfolio/util/app_theme.dart';
+import 'package:dave_portfolio/util/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class Detailsscreen extends StatelessWidget {
-  const Detailsscreen({super.key});
-  
+class DetailsScreen extends StatelessWidget {
+  const DetailsScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
         final double width = constraints.maxWidth;
-        bool isMobile = width < 600;
-        bool isTablet = width >= 600 && width < 1200;
+        bool isMobile = width < kMobileBreakpoint;
+        bool isTablet = width >= kMobileBreakpoint && width < kTabletBreakpoint;
+
         double maxContentWidth =
             isMobile ? double.infinity : (isTablet ? 700 : 800);
-        double horizontalPadding = isMobile ? 24.0 : 40.0;
-        double heading1Size = isMobile ? 48 : (isTablet ? 60 : 72);
-        double heading2Size = isMobile ? 80 : (isTablet ? 92 : 104);
-        double bodyTextSize = isMobile ? 16 : (isTablet ? 18 : 20);
-        double topPadding = kToolbarHeight + (isMobile ? 24 : 48);
+        double horizontalPadding = isMobile
+            ? kMobileHorizontalPadding
+            : (isTablet ? kTabletHorizontalPadding : kDesktopHorizontalPadding);
+        double heading1Size = isMobile
+            ? kMobileHeading1Size
+            : (isTablet ? kTabletHeading1Size : kDesktopHeading1Size);
+        double heading2Size = isMobile
+            ? kMobileHeading2Size
+            : (isTablet ? kTabletHeading2Size : kDesktopHeading2Size);
+        double bodyTextSize = isMobile
+            ? kMobileBodyTextSize
+            : (isTablet ? kTabletBodyTextSize : kDesktopBodyTextSize);
+        double topPadding = isMobile
+            ? kMobileTopPadding
+            : (isTablet ? kTabletTopPadding : kDesktopTopPadding);
 
         return Center(
           child: ConstrainedBox(
@@ -36,7 +49,6 @@ class Detailsscreen extends StatelessWidget {
                     "Based in Nigeria",
                     "3:12:33 PM",
                     bodyTextSize,
-                    Color(0xFF1A1A1A),
                   ),
                   const SizedBox(height: 12),
                   Divider(color: Colors.black.withOpacity(0.2), height: 1),
@@ -58,12 +70,11 @@ class Detailsscreen extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: isMobile ? 48 : 64),
-                   _buildRichTextInfo(
+                  _buildRichTextInfo(
                     prefix: "Mobile App developer",
                     boldText: "Flutter Developer",
                     textSize: bodyTextSize,
                   ),
-                  
                   const SizedBox(height: 20),
                   _buildRichTextInfo(
                     prefix: "Tech stack",
@@ -91,14 +102,10 @@ class Detailsscreen extends StatelessWidget {
     );
   }
 
-
-
-//======  // Helper methods to build the UI components
   Widget _buildInfoRow(
     String label,
     String value,
     double textSize,
-    Color textColor,
   ) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -107,7 +114,7 @@ class Detailsscreen extends StatelessWidget {
           label,
           style: GoogleFonts.inter(
             fontSize: textSize - 1,
-            color: textColor.withOpacity(0.8),
+            color: AppTheme.primaryColor.withOpacity(0.8),
           ),
         ),
         Text(
@@ -115,15 +122,13 @@ class Detailsscreen extends StatelessWidget {
           style: GoogleFonts.inter(
             fontSize: textSize - 1,
             fontWeight: FontWeight.w500,
-            color: textColor,
+            color: AppTheme.primaryColor,
           ),
         ),
       ],
     );
   }
 
-
-// Builds a RichText widget with a prefix and bold text
   Widget _buildRichTextInfo({
     required String prefix,
     required String boldText,
@@ -133,16 +138,16 @@ class Detailsscreen extends StatelessWidget {
       text: TextSpan(
         style: GoogleFonts.inter(
           fontSize: textSize,
-          color: Color(0xFF333333),
+          color: AppTheme.secondaryColor,
           height: 1.5,
         ),
         children: [
           TextSpan(text: "$prefix → "),
           TextSpan(
             text: boldText,
-            style: const TextStyle(
+            style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: Color(0xFF1A1A1A),
+              color: AppTheme.primaryColor,
             ),
           ),
         ],

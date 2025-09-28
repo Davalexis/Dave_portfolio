@@ -1,3 +1,5 @@
+import 'package:dave_portfolio/util/app_theme.dart';
+import 'package:dave_portfolio/util/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -11,15 +13,19 @@ class FooterSection extends StatelessWidget {
       child: LayoutBuilder(
         builder: (context, constraints) {
           final double width = constraints.maxWidth;
-          bool isMobile = width < 600;
+          bool isMobile = width < kMobileBreakpoint;
           double maxContentWidth =
-              isMobile ? double.infinity : (width < 1200 ? 700 : 800);
-          double horizontalPadding = isMobile ? 24.0 : 40.0;
+              isMobile ? double.infinity : (width < kTabletBreakpoint ? 700 : 800);
+          double horizontalPadding = isMobile
+              ? kMobileHorizontalPadding
+              : (width < kTabletBreakpoint
+                  ? kTabletHorizontalPadding
+                  : kDesktopHorizontalPadding);
           double verticalPadding = isMobile ? 48.0 : 96.0;
 
           return Column(
             children: [
-              const Divider(color: Colors.black, thickness: 2, height: 2),
+              const Divider(color: AppTheme.primaryColor, thickness: 2, height: 2),
               Center(
                 child: ConstrainedBox(
                   constraints: BoxConstraints(maxWidth: maxContentWidth),
@@ -70,9 +76,6 @@ class FooterSection extends StatelessWidget {
     );
   }
 
-
-
-//-------> Helper method to build footer links<-------
   Widget _buildFooterLink(String text) {
     return Text(
       '→ $text',

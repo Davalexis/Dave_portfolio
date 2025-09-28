@@ -1,11 +1,12 @@
-import 'package:dave_portfolio/Features/Detail_view/detailsScreen.dart';
-import 'package:dave_portfolio/Features/Footer_view/footer_section.dart';
-import 'package:dave_portfolio/Features/Projects_view/side_project_view.dart';
-import 'package:dave_portfolio/widget/Animated_background.dart';
+import 'package:dave_portfolio/features/detail_view/details_screen.dart';
+import 'package:dave_portfolio/features/footer_view/footer_section.dart';
+import 'package:dave_portfolio/features/projects_view/side_projects_section.dart';
+import 'package:dave_portfolio/widget/animated_background.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:url_launcher/url_launcher.dart'; // <-- IMPORT THE PACKAGE
+// import 'package:url_launcher/url_launcher.dart'; // <-- IMPORT THE PACKAGE
+import 'package:dave_portfolio/services/url_launcher_service.dart';
 
 class LandingPagePortfolio extends StatefulWidget {
   const LandingPagePortfolio({super.key});
@@ -15,11 +16,14 @@ class LandingPagePortfolio extends StatefulWidget {
   _LandingPagePortfolioState createState() => _LandingPagePortfolioState();
 }
 
+
+
 class _LandingPagePortfolioState extends State<LandingPagePortfolio>
     with SingleTickerProviderStateMixin {
   late AnimationController _noiseAnimationController;
   bool _isAnimating = true;
   Offset _cursorPosition = Offset.zero;
+  final UrlLauncherService _urlLauncherService = UrlLauncherService();
 
   @override
   void initState() {
@@ -53,30 +57,7 @@ class _LandingPagePortfolioState extends State<LandingPagePortfolio>
     super.dispose();
   }
 
-  // HELPER METHOD TO LAUNCH URLS SAFELY
-  Future<void> _launchURL(String url) async {
-    final Uri uri = Uri.parse(url);
-    try {
-      await launchUrl(uri, webOnlyWindowName: '_blank');
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Could not launch $url'
-          ),
-          duration: const Duration(seconds: 4),
-          backgroundColor: Colors.red,
-          behavior: SnackBarBehavior.floating,
-          padding: const EdgeInsets.all(16.0),
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.0),
 
-          ),
-          ),
-        );
-      }
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -112,15 +93,15 @@ class _LandingPagePortfolioState extends State<LandingPagePortfolio>
                   // floating: true,
                   actions: [
                     IconButton(
-                      onPressed: () => _launchURL('https://github.com/Davalexis'),
+                      onPressed: () => _urlLauncherService.launchURL('https://github.com/Davalexis'),
                       icon: const Icon(FontAwesomeIcons.github),
                     ),
                     IconButton(
-                      onPressed: () => _launchURL('https://X.com/Davalexis11'),
+                      onPressed: () => _urlLauncherService.launchURL('https://X.com/Davalexis11'),
                       icon: const Icon(FontAwesomeIcons.xTwitter),
                     ),
                     IconButton(
-                      onPressed: () => _launchURL('https://www.linkedin.com/in/david-alex-9331072a8/'),
+                      onPressed: () => _urlLauncherService.launchURL('https://www.linkedin.com/in/david-alex-9331072a8/'),
                       icon: const Icon(FontAwesomeIcons.linkedin),
                     ),
                     const SizedBox(width: 8),
@@ -131,10 +112,10 @@ class _LandingPagePortfolioState extends State<LandingPagePortfolio>
                   ),
                 ),
                 SliverToBoxAdapter(
-                  child: Detailsscreen(),
+                  child: DetailsScreen(),
                 ),
                 SliverToBoxAdapter(
-                  child: SideProjectsSection(),
+                  child: ProjectsSection(),
                 ),
                 SliverToBoxAdapter(
                   child: FooterSection(),
