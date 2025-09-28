@@ -1,10 +1,42 @@
+import 'dart:async';
+
 import 'package:dave_portfolio/util/app_theme.dart';
 import 'package:dave_portfolio/util/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
-class DetailsScreen extends StatelessWidget {
+class DetailsScreen extends StatefulWidget {
   const DetailsScreen({super.key});
+
+  @override
+  State<DetailsScreen> createState() => _DetailsScreenState();
+}
+
+class _DetailsScreenState extends State<DetailsScreen> {
+  late Stream<DateTime> _timeStream;
+  late StreamSubscription<DateTime> _timeSubscription;
+  late DateTime _currentTime;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentTime = DateTime.now();
+    _timeStream = Stream.periodic(const Duration(seconds: 1), (count) {
+      return DateTime.now();
+    });
+    _timeSubscription = _timeStream.listen((time) {
+      setState(() {
+        _currentTime = time;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _timeSubscription.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +79,7 @@ class DetailsScreen extends StatelessWidget {
                 children: [
                   _buildInfoRow(
                     "Based in Nigeria",
-                    "3:12:33 PM",
+                    DateFormat('h:mm:ss a').format(_currentTime),
                     bodyTextSize,
                   ),
                   const SizedBox(height: 12),
@@ -145,7 +177,7 @@ class DetailsScreen extends StatelessWidget {
           TextSpan(text: "$prefix → "),
           TextSpan(
             text: boldText,
-            style: TextStyle(
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
               color: AppTheme.primaryColor,
             ),

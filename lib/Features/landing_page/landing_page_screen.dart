@@ -5,7 +5,6 @@ import 'package:dave_portfolio/widget/animated_background.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-// import 'package:url_launcher/url_launcher.dart'; // <-- IMPORT THE PACKAGE
 import 'package:dave_portfolio/services/url_launcher_service.dart';
 
 class LandingPagePortfolio extends StatefulWidget {
