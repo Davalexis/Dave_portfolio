@@ -1,42 +1,11 @@
-import 'dart:async';
-
 import 'package:dave_portfolio/util/app_theme.dart';
 import 'package:dave_portfolio/util/constants.dart';
+import 'package:dave_portfolio/widget/dynamic_time.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 
-class DetailsScreen extends StatefulWidget {
+class DetailsScreen extends StatelessWidget {
   const DetailsScreen({super.key});
-
-  @override
-  State<DetailsScreen> createState() => _DetailsScreenState();
-}
-
-class _DetailsScreenState extends State<DetailsScreen> {
-  late Stream<DateTime> _timeStream;
-  late StreamSubscription<DateTime> _timeSubscription;
-  late DateTime _currentTime;
-
-  @override
-  void initState() {
-    super.initState();
-    _currentTime = DateTime.now();
-    _timeStream = Stream.periodic(const Duration(seconds: 1), (count) {
-      return DateTime.now();
-    });
-    _timeSubscription = _timeStream.listen((time) {
-      setState(() {
-        _currentTime = time;
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    _timeSubscription.cancel();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +48,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 children: [
                   _buildInfoRow(
                     "Based in Nigeria",
-                    DateFormat('h:mm:ss a').format(_currentTime),
+                    DynamicTime(textSize: bodyTextSize),
                     bodyTextSize,
                   ),
                   const SizedBox(height: 12),
@@ -136,7 +105,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   Widget _buildInfoRow(
     String label,
-    String value,
+    Widget value,
     double textSize,
   ) {
     return Row(
@@ -149,14 +118,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
             color: AppTheme.primaryColor.withOpacity(0.8),
           ),
         ),
-        Text(
-          value,
-          style: GoogleFonts.inter(
-            fontSize: textSize - 1,
-            fontWeight: FontWeight.w500,
-            color: AppTheme.primaryColor,
-          ),
-        ),
+        value,
       ],
     );
   }
