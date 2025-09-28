@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dave_portfolio/util/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -47,7 +48,7 @@ class _DynamicTimeState extends State<DynamicTime> {
       style: GoogleFonts.inter(
         fontSize: widget.textSize - 1,
         fontWeight: FontWeight.w500,
-        color: Theme.of(context).primaryColor,
+        color: AppTheme.primaryColor.withOpacity(0.8),
       ),
     );
   }
