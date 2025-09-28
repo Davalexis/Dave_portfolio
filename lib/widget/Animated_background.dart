@@ -1,17 +1,17 @@
-import 'package:dave_portfolio/widget/noise_painter.dart';
+// import 'package:dave_portfolio/widget/noise_painter.dart';
 import 'package:flutter/material.dart';
 
 class AnimatedBackground extends StatelessWidget {
-  final Offset cursorPosition;
-  final Size screenSize;
-  final AnimationController noiseController;
-
   const AnimatedBackground({
     super.key,
     required this.cursorPosition,
     required this.screenSize,
     required this.noiseController,
   });
+
+  final Offset cursorPosition;
+  final AnimationController noiseController;
+  final Size screenSize;
 
   @override
   Widget build(BuildContext context) {
@@ -41,10 +41,7 @@ class AnimatedBackground extends StatelessWidget {
               ],
               stops: const [0.0, 0.5, 1.0],
             ),
-          ),
-        ),
-        CustomPaint(
-          painter: NoisePainter(animation: noiseController),
+          ),  
           child: Container(),
         ),
       ],

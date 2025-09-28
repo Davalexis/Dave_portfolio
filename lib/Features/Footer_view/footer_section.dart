@@ -12,7 +12,8 @@ class FooterSection extends StatelessWidget {
         builder: (context, constraints) {
           final double width = constraints.maxWidth;
           bool isMobile = width < 600;
-          double maxContentWidth = isMobile ? double.infinity : (width < 1200 ? 700 : 800);
+          double maxContentWidth =
+              isMobile ? double.infinity : (width < 1200 ? 700 : 800);
           double horizontalPadding = isMobile ? 24.0 : 40.0;
           double verticalPadding = isMobile ? 48.0 : 96.0;
 
@@ -39,7 +40,6 @@ class FooterSection extends StatelessWidget {
                             _buildFooterLink('Email'),
                             _buildFooterLink('Resume'),
                             _buildFooterLink('CV'),
-                          
                           ],
                         ),
                         SizedBox(height: isMobile ? 48 : 96),
@@ -71,6 +71,8 @@ class FooterSection extends StatelessWidget {
   }
 
 
+
+//-------> Helper method to build footer links<-------
   Widget _buildFooterLink(String text) {
     return Text(
       '→ $text',
